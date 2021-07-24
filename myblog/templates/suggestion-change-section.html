@@ -1,0 +1,43 @@
+<head>
+    
+
+
+<link rel="stylesheet" href="../../static/blog/css/css/all.min.css"> 
+</head>
+
+<form id="sg-form" action = "{% url 'change-suggestion' %}" method="POST">
+{% csrf_token %}
+{% if item.isSuggested == "Normal" %}
+<div class="row">
+    <div class="col-lg-4 mr-3 ">
+         <a href="{% url 'article-detail' item.slug %}" style="color:black"><i>{{item.title}}</i> </a>
+    </div>
+    <div class="col-log-4 ml-5">
+        <button type="submit"  id="sg-btn" class="sg-btn" value ={{item.id}} >Add to Suggested</button>
+    </div>
+     <div class="col-lg-4 ml-3">
+                     <a href="{% url 'edit-post' item.slug %}" style="color:black"><i class="fas fa-edit"  ></i></a>
+                <a href="{% url 'delete-post' item.slug %}" style="color:black" ><i class="fas fa-trash ml-3" ></i></a>
+     </div>
+
+
+</div>
+{% else %}
+
+    <div class="row">
+        <div class="col-lg-3 mr-3">
+            <a href="{% url 'article-detail' item.slug %}" style="color:black" ><b><i>{{item.title}}</i></b></a> 
+        </div>
+        <div class="col-lg-3 ml-5">
+              </a> <button type="submit" id="sg-btn" class="sg-btn" value ={{item.id}} >Remove from Suggested</button>
+        </div>
+          <div class="col-lg-4 ml-3">
+                <a href="{% url 'edit-post' item.slug %}" style="color:black"><i class="fas fa-edit"  ></i></a>
+                <a href="{% url 'delete-post' item.slug %}" style="color:black" ><i class="fas fa-trash ml-3" ></i></a>
+               
+        </div>
+
+    </div>
+
+{% endif %}
+</form>

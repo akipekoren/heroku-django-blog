@@ -1,0 +1,261 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{post.title_tag}}{% endblock %}
+
+{% block content %}
+
+
+
+<div class="row">
+
+<div class="col-sm-2">  
+</div>
+
+<div class="text-center col-sm-8">
+
+<div class = "justify-content-center">
+
+
+
+     <h1>{{post.title}}</h1>
+     
+     <small> By : {{post.author.first_name}} {{post.author.last_name}} - {{post.date}} 
+     
+          {%if user.is_authenticated %}
+          {% if user.id == post.author.id%}
+               - <small><a href="{% url 'edit-post' post.slug %}">Edit</a></small> </small>
+               - <small><a href="{% url 'delete-post' post.slug %}">Delete</a></small>
+          {% endif %}
+     
+          {%endif%}
+     <br/>
+     <hr>
+     <br/>
+     </div>
+
+<!--
+{% if post.header_image%}
+
+<img src= "{{post.header_image.url}}" width="800" height="400" >
+
+<br><br>
+
+{%endif%}
+
+-->
+{{post.body | safe}}
+
+<br/> <br/>
+
+</div>    
+<div class="col-sm-2">  
+</div>
+</div>
+<hr>
+
+<div id="opinions">
+     
+     <center> <h2> Your Opinions</h2> </center>
+
+     <div id="like-section" >
+          {% include 'like_section.html'%}
+     </div>
+     {{total_comment}}  Comments
+
+
+     <div id="comment-section">
+
+          {% if not post.comments.all %}
+
+               {% include 'comment.html'%}
+          {% else %}
+               {% include 'comment.html'%}
+          <hr>
+          </br>
+          <div class= "comments-wrapper">
+               {% for comment in first_comments %}
+               <div class="comments">
+                    <strong>{{comment.user.first_name}} {{comment.user.last_name}} - {{comment.date_added}} </strong> 
+                    {% if user.id == comment.user.id%}
+                    -    <a href="{% url 'delete-comment' comment.id %}" class="text-decoration-none">
+                         Delete
+                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                         </svg>
+                    
+                       </a>
+                    {%endif%}
+                    <br>
+                 
+                    {{comment.body}}
+                    <br/><br/>
+
+               </div>
+                   
+          {% endfor %}
+     </div>   
+          {%endif%}
+ 
+
+          <p class="text-center">
+               <button class="btn btn-dark" id="load">Load More</button>
+          </p>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+          <script>
+
+               $(document).ready(function(){
+                    $("#load").on('click',function(){
+
+                         var _currentCount = $(".comments").length;
+
+                         $.ajax({
+                              url : "{% url 'load-more' %}",
+                              type : 'post',
+                              data :{
+                                   'offset' : _currentCount,
+                                   'csrfmiddlewaretoken' :"{{csrf_token}}",
+                                   'post_id' : "{{post.id}}"
+                                
+
+                              },
+                              dataType:'json', 
+
+                              beforeSend:function(){
+                                   $("#load").addClass('disabled').text('Loading...');
+
+                              },
+
+                              success:function(res){ 
+                                   var _html = '';
+                                   
+                                   var json_data = $.parseJSON(res.comments);
+                                   var first_name_list = res.first_name_list;
+                                   var last_name_list = res.last_name_list;
+                    
+                      
+                                
+
+
+                                   $.each(json_data,function(index,data){
+                                    
+                                        var long_date = data.fields.date_added;
+                                     
+                                        var comment_year = long_date.split("-")[0];
+                                        var month = parseInt(long_date.split("-")[1]);
+                                        var months = ['January','February','March','April','May','Jun',
+                                                       'July','August','September','October','November','December'];
+                                        var comment_month = months[month-1];
+                                        var comment_day = parseInt(long_date.split("-")[2].substr(0,2));
+                                      
+                                        var comment_hour = parseInt(long_date.split("T")[1].substr(0,2));
+                                        var comment_minute = parseInt(long_date.split("T")[1].substr(3,5));
+                                        var periods  ="";
+                                        if (comment_hour < 12)
+                                        {
+                                             periods = "a.m";
+                                        }
+                                        else{
+                                             periods = "p.m";
+                                        }
+
+                                        var django_version_date = comment_month + " " + comment_day + "," + comment_year + ", " + comment_hour + ":" + comment_minute + " " +  periods;
+                                        
+                                        var id = '{{ user.id }}'
+                                        console.log(data.pk)
+                                        
+
+                                        if( id == data.fields.user )
+                                        {
+                                             _html += ' <div class="comments">\
+                                                  <strong>'+first_name_list[index]+' '+last_name_list[index]+' - '+django_version_date+'  </strong>\
+                                                  <form action="delete-comment/'+data.pk+'" method="post">\
+                                                       <button type="submit" name="your_name" value='+data.pk+' class="btn-link">Go</button>\
+                                                       </form>\
+                                                       -    <a href= ""  class="text-decoration-none">\
+                                                       Delete\
+                                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">\
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>\
+                                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>\
+                                                       </svg></a>\
+                                                  <br>\
+                                                  '+data.fields.body+'\
+                                                  <br/><br/>\
+                                                  </div>';
+                                        }
+                                        else
+                                        {
+                                             _html += ' <div class="comments">\
+                                                  <strong>'+first_name_list[index]+' '+last_name_list[index]+' - '+django_version_date+'  </strong>\
+                                                  <br>\
+                                                  '+data.fields.body+'\
+                                                  <br/><br/>\
+                                                  </div>';
+                                        }
+                                      
+                                                  
+                                   }); 
+                                   $(".comments-wrapper").append(_html);
+
+                  
+                                   $("#load").removeClass('disabled').text('Load More');
+                                   
+                              }
+
+                         });
+                    });
+               });
+
+          </script>
+
+     </div>
+
+</div>
+<hr>
+
+
+
+
+
+<div class="card mb-3" >
+     <div class="row g-0">
+       <div class="col-md-2">
+
+          {% if post.author.profile.profile_pic%}
+         <img src="{{post.author.profile.profile_pic.url}}" width="200" height="200" class="card-img">
+
+         {%else%}
+         <img src="{% static 'blog/images/download.png' %}" width="200" height="200" class="card-img">
+
+          {%endif%}
+       </div>
+       <div class="col-md-10">
+         <div class="card-body">
+           <h5 class="card-title">{{post.author.first_name}} {{post.author.last_name}}</h5>
+          
+           <p class="small text-muted"> 
+
+               <a href="{% url 'show-profile' post.author.profile.id%}">Profile</a> | 
+                {%if post.author.profile.instagram_url%}
+                <a href= "{{post.author.profile.instagram_url}}" > Instagram  </a> |
+                {%endif%}
+                {%if post.author.profile.facebook_url%}
+                <a href= "{{post.author.profile.facebook_url}}" >  Facebook </a> |   
+                {%endif%}
+                {%if post.author.profile.twitter_url%}
+                <a href= "{{post.author.profile.twitter_url}}" > Twitter </a> | 
+                {%endif%}
+                {%if post.author.profile.website_url%}
+                <a href= "{{post.author.profile.website_url}}" > Website</a>
+                {%endif%}
+                </p>
+
+           <p class="card-text">{{post.author.profile.bio}}</p>
+         </div>
+       </div>
+     </div>
+   </div>
+
+{% endblock %}

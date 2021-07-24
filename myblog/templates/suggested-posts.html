@@ -1,0 +1,21 @@
+<head>
+  <link rel="stylesheet" href="/static/blog/css/suggestion_button.css" />
+</head>
+{% extends 'base.html' %} {% block title %}Choose your favorite posts
+{%endblock%} {% block content %}
+
+<i><h1>Manage your favorite posts</h1></i>
+<br />
+<br />
+{% for item in posts %}
+
+<div id="{{item.id}}">{% include 'suggestion-change-section.html'%}</div>
+<hr />
+
+{% endfor %}
+
+<br />
+<br />
+<br />
+
+{% endblock %}

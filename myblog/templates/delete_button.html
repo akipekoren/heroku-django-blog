@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stylish Delete Button</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <style>
+
+*,*::after,*::before {
+  margin: 0;
+  padding: 0;
+  line-hieght: inherit;
+  box-sizing: border-box;
+}
+
+html {
+ font-size: 62.5%;  
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  background-color: #01a3a4;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-box {
+  position: absolute;
+  width: 230px;
+  height: 43px;
+  background-color: #222f3e;
+  top: 50%;
+  border-radius: 2px;
+  padding: .5rem;
+  display: flex;
+  flex-direction: row;
+}
+
+/* ICONS */
+
+.icon-box {
+/*   background-color: #6a89cc; */
+  display: inline-block;
+  padding: .5rem .8rem;
+  transition: all .2s ease-out;
+  display: flex;
+  flex-direction: column;
+  width: 40px;
+  height: auto;
+  position: relative;
+}
+
+.icon-box:hover {
+  background-color: tomato;
+  cursor: pointer; 
+}
+
+
+
+.icon {
+  font-size: 2.5rem;
+/*   margin-bottom: 1.8rem; */
+  position: absolute;
+  transition: all .2s ease-out;
+}
+
+.trash-icon {
+  opacity: 1;
+  top: 0%;
+}
+
+.question-icon {
+  opacity: 0;
+  top: 30%;
+}
+
+.check-icon {
+  opacity: 0;
+  top: 60%;
+}
+
+
+
+
+/* TEXT BOX */
+
+.text-box {
+  display: inline-block;
+  background-color: tomato;
+  padding: 0 0;
+  width: 80%;
+  height: 35px;
+  margin: 0 0 0 .4rem;
+  text-align: center;
+  transition: all .2s ease-out;
+  position: relative;
+
+}
+
+.delete-text {
+  opacity: 1;
+  font-size: 2rem;
+/*   margin-left: 2rem; */
+  letter-spacing: 1px;
+  position: absolute;
+  top: 15%;
+  left: 30%;
+  transition: all .2s ease-out;
+}
+
+.sure-text {
+  opacity: 0;
+  position: absolute;
+  display: block;
+  font-size: 2rem;
+  top: 30%;
+  left: 20%;
+  transition: all .2s ease-out;
+}
+
+.confirm-text {
+  opacity: 0;
+  position: absolute;
+  display: block;
+  font-size: 2rem;
+  top: 60%;
+  left: 35%;
+  transition: all .2s ease-out;
+}
+
+
+.main-box:hover .text-box {
+  width: 80%;
+}
+
+.main-box:hover .delete-text {
+  opacity: 1;
+} 
+.main-box:hover .sure-text {
+  opacity: 0;
+} 
+.main-box:hover .confirm-text {
+  opacity: 0;
+} 
+
+
+  </style>
+
+
+<script>
+$(document).ready(function(){
+  $('.trash-icon').on('click', function(){
+    $(this).css('opacity', '0');
+    $('.question-icon').css('top', '0%');
+    $('.question-icon').css('opacity', '1');
+    $('.check-icon').css('top', '30%');
+  });
+  
+  $('.question-icon').on('click', function(){
+    $(this).css('opacity', '0');
+    $('.check-icon').css('top', '0%');
+    $('.check-icon').css('opacity', '1');
+  });
+  
+  $('.trash-icon').on('click', function(){
+    $('.delete-text').css('opacity', '0');
+    $('.text-box').css('background-color', '#fed330');
+    $('.sure-text').css('top', '15%');
+    $('.sure-text').css('opacity', '1');
+    $('.confirm-text').css('top', '30%');
+  });
+  
+  $('.question-icon').on('click', function(){
+    $('.sure-text').css('opacity', '0');
+    $('.text-box').css('background-color', '#3ae374');
+    $('.confirm-text').css('top', '15%');
+    $('.confirm-text').css('opacity', '1');
+  });
+  
+});
+
+
+
+</script>
+</head>
+<body>
+  <div class="main-box">
+    
+    <div class="icon-box">
+        <i href = "{% url 'edit-profile' %}" class="fas fa-trash-alt icon trash-icon"></i>
+        <i class="fas fa-question icon question-icon"></i>
+        <i class="fas fa-check icon check-icon"></i>
+
+    </div>
+    <div class="text-box">
+      <span class="delete-text">Delete</span>
+      <span class="sure-text">Are you sure?</span>
+      <span class="confirm-text">Done!</span>
+    </div>
+    
+  </div> <!-- End main-box -->
+  
+</body>
+</html>

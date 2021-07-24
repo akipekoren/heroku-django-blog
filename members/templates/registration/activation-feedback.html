@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+<!--   
+-->
+{% block title %}Change Password{% endblock %}
+<!--   
+-->
+{% block content %}
+
+<style>
+  p {
+    text-align: center;
+    transform: translate(0, 100%);
+  }
+</style>
+
+<div class="container">
+  <p>
+    Your registration is completed, please
+    <a href="{% url 'login' %}"> Login</a>
+  </p>
+  <br />
+</div>
+
+{% endblock %}

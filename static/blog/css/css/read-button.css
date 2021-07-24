@@ -1,0 +1,17 @@
+.read:link,
+.read:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid rgb(122, 122, 122);
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.read:hover,
+.read:active {
+  background-color: rgb(122, 122, 122);
+  color: white;
+}

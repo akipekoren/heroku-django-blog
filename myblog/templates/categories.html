@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if category_posts %}
+
+<h1 style="text-align: center; margin-top: 30px; color:black; font-style: italic;" > {{cats}} Articles </h1>
+<br/>
+<br/>
+
+<head>
+
+{% load static %}
+    <link href="{% static 'blog/css/css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/css/css/read-button.css' %}" rel="stylesheet">
+</head>
+
+<div class="container">
+  <div class="text-center row">
+    {% for post in category_posts %} 
+      {% if forloop.counter0|divisibleby:2 %}
+    <div class="col-lg-6">
+      <div class="image-part">
+        {% if post.header_image %}
+        <a href="{% url 'article-detail' post.slug %}">
+          <img
+            class="card-img-top"
+            src="{{post.header_image.url}}"
+            width="150"
+            height="225"
+            alt="Card image cap"
+          />
+        </a>
+        {%endif%}
+      </div>
+      <div class="body-part" style="height: 300px">
+        <div class="card-body">
+          <h3 class="card-title">{{post.title}}</h3>
+          <p class="small text-muted">
+            <b
+              ><i
+                ><small>
+                  by {{post.author.first_name}} {{post.author.last_name}}
+                </small></i
+              ></b
+            >
+            / {{post.date}}
+              {%if user.is_authenticated %} 
+              {% if user.id == post.author.id%} /
+            <small><a href="{% url 'edit-post' post.slug %}">Edit</a></small> /
+            <small
+              ><a href="{% url 'delete-post' post.slug %}">Delete</a></small
+            >
+            {%endif%} 
+            {%endif%}
+          </p>
+
+          <div style="height: 200px">
+            <div style="height: 50%">
+              <p class="card-text">{{post.snippet}}</p>
+            </div>
+            <br />
+            <div style="top: 100%">
+              <i
+                ><a
+                  class="read"
+                  target="_blank"
+                  href="{% url 'article-detail' post.slug %}"
+                  >Read more</a
+                ></i
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%else%}
+    <div class="col-lg-6">
+      <div class="image-part">
+        {% if post.header_image %}
+        <a href="{% url 'article-detail' post.slug %}">
+          <img
+            class="card-img-top"
+            src="{{post.header_image.url}}"
+            width="150"
+            height="225"
+            alt="Card image cap"
+          />
+        </a>
+        {%endif%}
+      </div>
+      <div class="body-part" style="height: 300px">
+        <div class="card-body">
+          <h3 class="card-title">{{post.title}}</h3>
+          <p class="small text-muted">
+            <b
+              ><i
+                ><small>
+                  by {{post.author.first_name}} {{post.author.last_name}}
+                </small></i
+              ></b
+            >
+            / {{post.date}} 
+              {%if user.is_authenticated %}
+              {% if user.id == post.author.id%} /
+            <small><a href="{% url 'edit-post' post.slug %}">Edit</a></small> /
+            <small
+              ><a href="{% url 'delete-post' post.slug %}">Delete</a></small
+            >
+            {%endif%}
+              {%endif%}
+          </p>
+
+          <div style="height: 200px">
+            <div style="height: 50%">
+              <p class="card-text">{{post.snippet}}</p>
+            </div>
+            <br />
+            <div style="top: 100%">
+              <i
+                ><a
+                  class="read"
+                  target="_blank"
+                  href="{% url 'article-detail' post.slug %}"
+                  >Read more</a
+                ></i
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endif%}
+    {%endfor%}
+
+    <br />
+    <br />
+  </div>
+</div>
+
+{% else %}
+
+<div  style="margin-top: 40px; text-align: center">
+<h4>Sorry this page is not exist</h4>
+<a style="color:gray" href="{% url 'home' %}">Go Main Page </a>
+</div>
+{% endif %}
+{% endblock %}
