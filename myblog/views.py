@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Category, Comment
@@ -10,7 +11,7 @@ from django.template.loader import render_to_string
 from django.core import serializers
 from collections import defaultdict
 import random
-
+from django.db.utils import OperationalError
 
 # Create your views here.
 
@@ -22,6 +23,7 @@ class HomeView(ListView):
     # ordering = ['-id']
 
     def get_context_data(self, *args, **kwargs):
+
         cat_menu = Category.objects.all()
         context = super(HomeView, self).get_context_data(*args, **kwargs)
         context["cat_menu"] = cat_menu
