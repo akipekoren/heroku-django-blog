@@ -1,0 +1,16 @@
+post gre config -> https://medium.com/djangotube/django-sqlite-to-postgresql-database-migration-e3c1f76711e1
+
+virtual environment -> source django_env/bin/activate
+
+heroku database config -> https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true
+
+
+Register degisicek
+
+
+
+Pamir Sen credientials
+
+username : PamirSen
+
+password : PampoShine1234
